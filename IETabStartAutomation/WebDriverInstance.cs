@@ -14,7 +14,7 @@ namespace IETabStartAutomation
         public WebDriverInstance()
         {
             ChromeOptions options = new ChromeOptions();
-            options.AddExtension(@"C:\Users\ADM\Desktop\IETabExtension\HEHIJBFGIEKMJFKFJPBKBAMMJBDENADD_16_10_16_1.crx");
+            options.AddExtension(@"C:\IETabStartAutomation\CRX\HEHIJBFGIEKMJFKFJPBKBAMMJBDENADD_16_10_16_1.crx");
             Driver = new ChromeDriver(options);
         }
 

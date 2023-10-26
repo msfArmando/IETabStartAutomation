@@ -14,6 +14,7 @@ namespace IETabStartAutomation
     public class Program
     {
         public static IWebDriver Driver { get; set; }
+        private static string cmdText = "taskkill /F /IM chromedriver.exe";
         public static void Main(string[] args)
         {
             int tries = 0;
@@ -47,18 +48,21 @@ namespace IETabStartAutomation
                     }
                     catch (Exception)
                     {
-                        custom.TryClickBtnJs(5, 5, "trial-continue");
+                        custom.TryClickBtnJs(5, 1, "trial-continue");
                     }
 
                     Thread.Sleep(5000);
 
-                    IWebElement addressbox = custom.TryFindElementByXpathWithAttempts(5, 5, "//input[contains(@id, 'address-box')]");
-                    addressbox.Clear();
-                    Thread.Sleep(1000);
-                    addressbox.SendKeys(link);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        IWebElement addressbox = custom.TryFindElementByXpathWithAttempts(5, 5, "//input[contains(@id, 'address-box')]");
+                        addressbox.Clear();
 
-                    IWebElement btnSearch = Driver.FindElement(By.XPath("//img[contains(@id, 'go-btn')]"));
-                    custom.TryClickElement(5, 5, btnSearch);
+                        Thread.Sleep(1000);
+                        addressbox.SendKeys(link);
+
+                        custom.TryClickBtnJs(5, 5, "go-btn");
+                    }
   
                     Console.ReadLine();
                 }
@@ -67,6 +71,7 @@ namespace IETabStartAutomation
                     tries++;
                     Driver.Quit();
                     Driver.Dispose();
+                    System.Diagnostics.Process.Start(cmdText);
                 }
             } while (tries <= 5);
         }

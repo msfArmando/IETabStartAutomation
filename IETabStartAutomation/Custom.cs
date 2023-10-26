@@ -93,7 +93,7 @@ namespace IETabStartAutomation
             throw new Exception("Elementos não encontrados.");
         }
 
-        public IWebElement TryClickBtnJs(int tries, int secs, string id)
+        public void TryClickBtnJs(int tries, int secs, string id)
         {
             var times = 0;
             do
@@ -101,6 +101,7 @@ namespace IETabStartAutomation
                 try
                 {
                     jse.ExecuteScript($"document.getElementById('{id}').click();");
+                    throw new Exception();
                 }
                 catch (Exception)
                 {
@@ -108,7 +109,7 @@ namespace IETabStartAutomation
                     Thread.Sleep(secs * 1000);
                 }
             } while (times < tries);
-            throw new Exception("Element not clickable.");
+            return;
         }
 
         public void WaitForLoadPage(string path)
