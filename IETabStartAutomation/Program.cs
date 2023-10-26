@@ -16,23 +16,59 @@ namespace IETabStartAutomation
         public static IWebDriver Driver { get; set; }
         public static void Main(string[] args)
         {
-            WebDriverInstance webDriverInstance = new WebDriverInstance();
-            Driver = webDriverInstance.ReturnDriver();
+            int tries = 0;
+            do
+            {
+                try
+                {
+                    string link = "http://prouni.mec.gov.br/prouni2006/Login/";
+                    WebDriverInstance webDriverInstance = new WebDriverInstance();
+                    Driver = webDriverInstance.ReturnDriver();
+                    Custom custom = new Custom(Driver);
 
-            WebDriverWait wait = new WebDriverWait(Driver, new TimeSpan(0, 0, 60));
+                    WebDriverWait wait = new WebDriverWait(Driver, new TimeSpan(0, 0, 60));
 
-            Driver.Navigate().GoToUrl("chrome-extension://hehijbfgiekmjfkfjpbkbammjbdenadd/nhc.htm#url=https://www.ietab.net/ie-tab-documentation?from=chromeurl");
-            Driver.Manage().Window.Maximize();
+                    Driver.Navigate().GoToUrl("chrome-extension://hehijbfgiekmjfkfjpbkbammjbdenadd/nhc.htm#url=https://www.ietab.net/ie-tab-documentation?from=chromeurl");
+                    Driver.Manage().Window.Maximize();
 
-            wait.Until(wd => wd.WindowHandles.Count == 2);
+                    wait.Until(wd => wd.WindowHandles.Count == 2);
+                    Thread.Sleep(2000);
 
-            var handles = Driver.WindowHandles;
+                    var handles = Driver.WindowHandles;
 
-            Driver.SwitchTo().Window(handles[1]);
-            Driver.Close();
-            Driver.SwitchTo().Window(handles[0]);
+                    Driver.SwitchTo().Window(handles[1]);
+                    Driver.Close();
+                    Driver.SwitchTo().Window(handles[0]);
 
-            Driver.FindElement(By.XPath("//button[contains(@id, 'trial-continue')]")).Click();
+                    var btnAccept = custom.TryFindElementByXpathWithAttemptsThrowNull(5, 5, "//button[contains(@id, 'trial-continue')]");
+                    try
+                    {
+                        btnAccept.Click();
+                    }
+                    catch (Exception)
+                    {
+                        custom.TryClickBtnJs(5, 5, "trial-continue");
+                    }
+
+                    Thread.Sleep(5000);
+
+                    IWebElement addressbox = custom.TryFindElementByXpathWithAttempts(5, 5, "//input[contains(@id, 'address-box')]");
+                    addressbox.Clear();
+                    Thread.Sleep(1000);
+                    addressbox.SendKeys(link);
+
+                    IWebElement btnSearch = Driver.FindElement(By.XPath("//img[contains(@id, 'go-btn')]"));
+                    custom.TryClickElement(5, 5, btnSearch);
+  
+                    Console.ReadLine();
+                }
+                catch (Exception)
+                {
+                    tries++;
+                    Driver.Quit();
+                    Driver.Dispose();
+                }
+            } while (tries <= 5);
         }
     }
 }
