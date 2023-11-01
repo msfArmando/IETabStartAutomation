@@ -34,33 +34,33 @@ namespace IETabStartAutomation
                     wait.Until(wd => wd.WindowHandles.Count == 2);
                     Thread.Sleep(2000);
 
-                    var handles = Driver.WindowHandles;
-
-                    Driver.SwitchTo().Window(handles[1]);
-                    Driver.Close();
-                    Driver.SwitchTo().Window(handles[0]);
-
-                    var btnAccept = custom.TryFindElementByXpathWithAttemptsThrowNull(5, 5, "//button[contains(@id, 'trial-continue')]");
-                    try
+                    for (int i = 0; i < 3; i++)
                     {
-                        btnAccept.Click();
+                        IWebElement addressbox = custom.TryFindElementByXpathWithAttempts(5, 5, "//input[contains(@id, 'address-box')]");
+                        addressbox.Clear();
+
+                        Thread.Sleep(1000);
+                        addressbox.SendKeys(link);
+                        addressbox.Clear();
+                        addressbox.SendKeys(link);
+
+                        custom.TryClickBtnJs(5, 1, "go-btn");
+
+                        var btnAccept = custom.TryFindElementByXpathWithAttemptsThrowNull(5, 5, "//button[contains(@id, 'trial-continue')]");
+                        if (btnAccept != null)
+                        {
+                            try
+                            {
+                                btnAccept.Click();
+                            }
+                            catch (Exception)
+                            {
+                                custom.TryClickBtnJs(5, 1, "trial-continue");
+                            }
+                        }
                     }
-                    catch (Exception)
-                    {
-                        custom.TryClickBtnJs(5, 5, "trial-continue");
-                    }
-
-                    Thread.Sleep(5000);
-
-                    IWebElement addressbox = custom.TryFindElementByXpathWithAttempts(5, 5, "//input[contains(@id, 'address-box')]");
-                    addressbox.Clear();
-                    Thread.Sleep(1000);
-                    addressbox.SendKeys(link);
-
-                    IWebElement btnSearch = Driver.FindElement(By.XPath("//img[contains(@id, 'go-btn')]"));
-                    custom.TryClickElement(5, 5, btnSearch);
-  
-                    Console.ReadLine();
+                    
+                    break;
                 }
                 catch (Exception)
                 {

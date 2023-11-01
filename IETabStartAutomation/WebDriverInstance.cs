@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace IETabStartAutomation
         public static IWebDriver Driver { get; set; }
         public WebDriverInstance()
         {
-            ChromeOptions options = new ChromeOptions();
-            options.AddExtension(@"C:\Users\ADM\Desktop\IETabExtension\HEHIJBFGIEKMJFKFJPBKBAMMJBDENADD_16_10_16_1.crx");
-            Driver = new ChromeDriver(options);
+            EdgeOptions options = new EdgeOptions();
+            options.AddExtension(@"C:\IETabStartAutomation\CRX\HEHIJBFGIEKMJFKFJPBKBAMMJBDENADD_16_10_16_1.crx");
+            Driver = new EdgeDriver(options);
         }
 
         public IWebDriver ReturnDriver()
