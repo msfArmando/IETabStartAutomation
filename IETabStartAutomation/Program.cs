@@ -26,28 +26,40 @@ namespace IETabStartAutomation
                     Driver = webDriverInstance.ReturnDriver();
                     Custom custom = new Custom(Driver);
 
-                    WebDriverWait wait = new WebDriverWait(Driver, new TimeSpan(0, 0, 60));
+                    //WebDriverWait wait = new WebDriverWait(Driver, new TimeSpan(0, 0, 60));
 
                     Driver.Navigate().GoToUrl("chrome-extension://hehijbfgiekmjfkfjpbkbammjbdenadd/nhc.htm#url=https://www.ietab.net/ie-tab-documentation?from=chromeurl");
                     Driver.Manage().Window.Maximize();
 
-                    wait.Until(wd => wd.WindowHandles.Count == 2);
+                    //wait.Until(wd => wd.WindowHandles.Count == 2);
                     Thread.Sleep(2000);
 
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         IWebElement addressbox = custom.TryFindElementByXpathWithAttempts(5, 5, "//input[contains(@id, 'address-box')]");
-                        addressbox.Clear();
+                        //if(i == 2)
+                        //{
+                        //    string elementText = addressbox.Text;
+                        //    if (elementText.Contains("prouni2006/Login"))
+                        //    {
+                        //        break;
+                        //    }
+                        //}
 
                         Thread.Sleep(1000);
-                        addressbox.SendKeys(link);
                         addressbox.Clear();
+                        Thread.Sleep(1000);
                         addressbox.SendKeys(link);
-
+                        Thread.Sleep(1000);
+                        addressbox.Clear();
+                        Thread.Sleep(1000);
+                        addressbox.SendKeys(link);
+                        Thread.Sleep(1000);
                         custom.TryClickBtnJs(5, 1, "go-btn");
+                        Thread.Sleep(1000);
 
                         var btnAccept = custom.TryFindElementByXpathWithAttemptsThrowNull(5, 5, "//button[contains(@id, 'trial-continue')]");
-                        if (btnAccept != null)
+                        if (btnAccept != null && i < 1)
                         {
                             try
                             {
@@ -59,7 +71,6 @@ namespace IETabStartAutomation
                             }
                         }
                     }
-                    
                     break;
                 }
                 catch (Exception)
