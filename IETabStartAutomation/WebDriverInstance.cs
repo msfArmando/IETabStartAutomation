@@ -14,9 +14,12 @@ namespace IETabStartAutomation
         public static IWebDriver Driver { get; set; }
         public WebDriverInstance()
         {
+            var edgeDriverService = EdgeDriverService.CreateDefaultService();
+            edgeDriverService.HideCommandPromptWindow = true;
+
             EdgeOptions options = new EdgeOptions();
             options.AddExtension(@"C:\IETabStartAutomation\CRX\HEHIJBFGIEKMJFKFJPBKBAMMJBDENADD_16_10_16_1.crx");
-            Driver = new EdgeDriver(options);
+            Driver = new EdgeDriver(edgeDriverService, options);
         }
 
         public IWebDriver ReturnDriver()
